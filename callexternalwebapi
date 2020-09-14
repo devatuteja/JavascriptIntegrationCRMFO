@@ -1,0 +1,63 @@
+
+    static async Task GetAccounts()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://192.168.10.60/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                //GET Method                 
+                HttpResponseMessage response = await client.GetAsync("api/account");
+                if (response.IsSuccessStatusCode)
+                {
+                    var Acc = await response.Content.ReadAsAsync<IDictionary<string,object>>();
+                                     
+                }
+                else
+                {
+                    Console.WriteLine("Internal server Error");
+                }
+            }
+        }
+        public class Account
+        {
+            public string Accountid { get; set; }
+            public string exception { get; set; }
+        }
+        static async Task UpdateInsertFlag()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://192.168.10.60/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                //PUT Method
+                //http://192.168.10.60/api/Account?Accountid=14765b86-ad98-e911-90fa-00155d0a0438
+                Account acc = new Account();
+                acc.Accountid = "3c8f483f-aed0-ea11-911b-00155d0a0438";
+                HttpResponseMessage response = await client.PutAsJsonAsync("api/Account?Accountid="+acc.Accountid,acc);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Success");
+                }
+            }
+        }
+        static async Task UpdateExceptionFlag()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://192.168.10.60/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                //PUT Method
+                //http://192.168.10.60/api/Account?Accountid=8168a685-94e6-ea11-911c-00155d0a0438&ex="Exception"                
+                Account acc = new Account();
+                acc.Accountid = "3c8f483f-aed0-ea11-911b-00155d0a0438";
+                acc.exception = "ExceptionMessage";
+                HttpResponseMessage response = await client.PutAsJsonAsync("api/Account?Accountid="+acc.Accountid +"&ex="+acc.exception, acc);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Success");
+                }
+            }
+        }
